@@ -20,3 +20,5 @@ Enter the voldemort shell:
 
 * [Project Voldemort](http://project-voldemort.com/)
 * [Design overview](http://project-voldemort.com/design.php)
+
+## Concept
