@@ -52,6 +52,12 @@ Check the member status:
 
 ## Backends
 
+### LevelDB
+
+[LevelDB](http://wiki.basho.com/LevelDB.html)
+
+Use `{storage_backend, riak_kv_eleveldb_backend}` in your app.config file.
+
 ## Links
 
 * [Riak](http://wiki.basho.com/)
