@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Riak demo app - a bloging system</title>
+    </head>
+    <body>
+        <h1>Blogs in the blogsphere:</h1>
+        <ul>
+            {% for blog in blogs %}
+            <li><a href="./blogs/{{ blog.id }}">{{ blog.id }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h1>Timeline:</h1>
+        <ul>
+            {% for post in posts %}
+            <li><a href="./blogs/{{ post.blog_id }}/posts/{{ post.title }}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
