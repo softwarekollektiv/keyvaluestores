@@ -1,13 +1,13 @@
 <!doctype html>
 <html>
     <head>
-        <title>{{ blog.title }}</title>
+        <title>{{ blog.id}}</title>
     </head>
     <body>
-        <h1>{{ blog.title }}</h1>
+        <h1>{{ blog.id }}</h1>
         <ul>
             {% for post in blog.posts %}
-            <li><a href="./posts/{{ post.title }}">{{ post.title }}</a></li>
+            <li><a href="./posts/{{ post.id }}">{{ post.id }}</a></li>
             {% endfor %}
         </ul>
 
