@@ -31,18 +31,18 @@ def index():
 @app.route('/blogs/<blog_id>/')
 def blogs(blog_id):
     client = riak.RiakClient()
-    
+
     blogs = client.bucket('blogs')
     blog = blogs.get(blog_id)
     links = blog.get_links()
-    print links 
-    posts = [link.get().get_data() for link in links] 
-    print posts 
+    print links
+    posts = [link.get().get_data() for link in links]
+    print posts
     blog = {
       'id': blog_id,
       'posts' : posts
     }
-  
+
     return render_template('blog.html', blog=blog)
 
 @app.route('/users/<username>/')
@@ -60,19 +60,19 @@ def posts(blog_id, post_id=None):
             client = riak.RiakClient()
 
             bucket = client.bucket('posts')
-            post = bucket.new(blog_id+"_"+id, 
+            post = bucket.new(blog_id+"_"+id,
               data={
                 'id': id,
                 'body': body
               })
-        
+
             blogs = client.bucket('blogs')
             blog = blogs.get(blog_id)
             blog.add_link(post)
-            
-            post.add_link(blog) 
-          
-            blog.store()  
+
+            post.add_link(blog)
+
+            blog.store()
             post.store()
             return redirect("/blogs/"+blog_id)
         else:
