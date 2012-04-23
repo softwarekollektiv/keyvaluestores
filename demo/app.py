@@ -28,40 +28,61 @@ def index():
 
     return render_template('index.html', blogs=blogs, posts=posts)
 
-@app.route('/blogs/<title>/')
-def blogs(title):
+@app.route('/blogs/<blog_id>/')
+def blogs(blog_id):
+    client = riak.RiakClient()
+    
+    blogs = client.bucket('blogs')
+    blog = blogs.get(blog_id)
+    links = blog.get_links()
+    print links 
+    posts = [link.get().get_data() for link in links] 
+    print posts 
     blog = {
-            'title': title,
-            'posts': [{'title': 'lala'}]
-           }
+      'id': blog_id,
+      'posts' : posts
+    }
+  
     return render_template('blog.html', blog=blog)
 
 @app.route('/users/<username>/')
 def users(username):
     return render_template('user.html', username=username)
 
-@app.route('/blogs/<blog_title>/posts/', methods=['POST'])
-@app.route('/blogs/<blog_title>/posts/<post_title>/')
-def posts(blog_title, post_title=None):
+@app.route('/blogs/<blog_id>/posts/', methods=['POST'])
+@app.route('/blogs/<blog_id>/posts/<post_id>/')
+def posts(blog_id, post_id=None):
 
     if request.method == 'POST':
         id = request.form['id']
         body = request.form['body']
         if id!= None and body != None:
-						client = riak.RiakClient()
-						bucket = client.bucket('posts')
-						post = bucket.new(blog_title+"_"+id, 
-							data={
-								'body': body
-							})
-						post.store()
+            client = riak.RiakClient()
 
-						return redirect("/blogs/"+blog_title)
+            bucket = client.bucket('posts')
+            post = bucket.new(blog_id+"_"+id, 
+              data={
+                'id': id,
+                'body': body
+              })
+        
+            blogs = client.bucket('blogs')
+            blog = blogs.get(blog_id)
+            blog.add_link(post)
+            
+            post.add_link(blog) 
+          
+            blog.store()  
+            post.store()
+            return redirect("/blogs/"+blog_id)
         else:
-						#TODO Fehlermeldung
-						return redirect("/blogs/"+blog_title)
+            #TODO Fehlermeldung
+            return redirect("/blogs/"+blog_id)
     else:
-        return 'Post %s' % post_title
+        client = riak.RiakClient()
+        posts = client.bucket('posts')
+        post = posts.get(blog_id+"_"+post_id)
+        return render_template('post.html', post=post.get_data())
 
 if __name__ == '__main__':
 
