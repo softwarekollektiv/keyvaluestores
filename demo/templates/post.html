@@ -5,6 +5,19 @@
     </head>
     <body>
         <h1>{{ post.id }}</h1>
-        <p>{{ post.body }}</p> 
+        <p>{{ post.body }}</p>
+
+        {% for comment in post.comments %}
+        <h2>{{comment.title}}</h2>
+        <p>{{comment.body}}</p>
+        {% endfor %}
+        <form method="post" action="./comments">
+            <label>Comment title:</label>
+            <input name="title" type="text">
+            <label>Comment body:</label>
+            <textarea name="body" rows="10" cols="80">
+            </textarea>
+            <button type="submit">Submit</button>
+        </form>
     </body>
 </html>

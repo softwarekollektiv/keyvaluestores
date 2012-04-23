@@ -65,7 +65,8 @@ def posts(blog_id, post_id=None):
               data={
                 'id': id,
                 'body': body,
-                'blog_id': blog_id
+                'blog_id': blog_id,
+                'comments' : [] 
               })
 
             # add timestamp index for post
@@ -89,6 +90,26 @@ def posts(blog_id, post_id=None):
         posts = client.bucket('posts')
         post = posts.get(blog_id+"_"+post_id)
         return render_template('post.html', post=post.get_data())
+
+@app.route('/blogs/<blog_id>/posts/<post_id>/comments', methods=['POST'])
+def comment(blog_id,post_id):
+    if request.method == 'POST':
+        id = request.form['title']
+        body = request.form['body']
+
+        client = riak.RiakClient()
+        posts = client.bucket('posts')
+        post = posts.get(blog_id+"_"+post_id)
+        comments = post.get_data()['comments']
+        comments.append({'title':id,'body':body})
+        post.store()
+
+        return redirect("/blogs/"+blog_id+"/posts/"+post_id) 
+
+    else:
+        #TODO Fehlermeldung
+        return redirect("/blogs/"+blog_id+"/posts/"+post_id) 
+
 
 if __name__ == '__main__':
 
