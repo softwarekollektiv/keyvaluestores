@@ -9,18 +9,21 @@ import riak
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
-    blogs = [
-            {'id': 'philipps_crazy_blog'},
-            {'id': 'felix_crazy_blog'}
-            ]
+
+    client = riak.RiakClient()
+    bucket = client.bucket('blogs')
+
+    # get a list of keys that point to blog entries
+    blogs = bucket.get_keys()
+
     posts = [
             {'blog_id': 'philipps_crazy_blog', 'title': 'lala', 'timestamp': 123456},
             {'blog_id': 'felix_crazy_blog', 'title': 'foo', 'timestamp': 123456},
             {'blog_id': 'philipps_cray_blog', 'title': 'bar', 'timestamp': 123456}
             ]
+
     return render_template('index.html', blogs=blogs, posts=posts)
 
 @app.route('/blogs/<title>/')
