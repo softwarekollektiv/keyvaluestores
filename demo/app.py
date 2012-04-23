@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import redirect
 from flask import render_template
 from flask import request
 
@@ -39,21 +40,21 @@ def users(username):
 def posts(blog_title, post_title=None):
 
     if request.method == 'POST':
-        title = request.form['title']
+        id = request.form['id']
         body = request.form['body']
-        if title != None and body != None:
-            #blog = Blog(blog_title)
-            #post = Post(request.form['title'], request.form['body'], blog)
+        if id!= None and body != None:
+						client = riak.RiakClient()
+						bucket = client.bucket('posts')
+						post = bucket.new(blog_title+"_"+id, 
+							data={
+								'body': body
+							})
+						post.store()
 
-            #client = riak.RiakClient()
-            #bucket = client.bucket('posts')
-            #post = bucket.new(blog_title + "-" + title, {'title': title, 'body': body, 'timestamp': 12345})
-            #post.store()
-
-            print(client)
-
+						return redirect("/blogs/"+blog_title)
         else:
-            return ""
+						#TODO Fehlermeldung
+						return redirect("/blogs/"+blog_title)
     else:
         return 'Post %s' % post_title
 
