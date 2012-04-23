@@ -14,7 +14,7 @@
         <h1>Timeline:</h1>
         <ul>
             {% for post in posts %}
-            <li><a href="./blogs/{{ post.blog_id }}/posts/{{ post.title }}">{{ post.title }}</a></li>
+            <li><a href="./blogs/{{ post.blog_id }}/posts/{{ post.id }}">{{ post.id }}</a></li>
             {% endfor %}
         </ul>
     </body>

@@ -5,7 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 
-from datetime import datetime
+from time import time
 
 import riak
 
@@ -20,11 +20,13 @@ def index():
     # get a list of keys that point to blog entries
     blogs = bucket.get_keys()
 
-    posts = [
-            {'blog_id': 'philipps_crazy_blog', 'title': 'lala', 'timestamp': 123456},
-            {'blog_id': 'felix_crazy_blog', 'title': 'foo', 'timestamp': 123456},
-            {'blog_id': 'philipps_cray_blog', 'title': 'bar', 'timestamp': 123456}
-            ]
+    end_time = int(time())
+    start_time = end_time - 60*5
+
+    # use a secondary index to fetch blog posts in the last 5 minutes
+    post_links = client.index('posts', 'timestamp_int', start_time, end_time).run()
+
+    posts = [link.get().get_data() for link in post_links]
 
     return render_template('index.html', blogs=blogs, posts=posts)
 
@@ -35,9 +37,8 @@ def blogs(blog_id):
     blogs = client.bucket('blogs')
     blog = blogs.get(blog_id)
     links = blog.get_links()
-    print links
+    # fetch all blog posts via link walking
     posts = [link.get().get_data() for link in links]
-    print posts
     blog = {
       'id': blog_id,
       'posts' : posts
@@ -63,13 +64,18 @@ def posts(blog_id, post_id=None):
             post = bucket.new(blog_id+"_"+id,
               data={
                 'id': id,
-                'body': body
+                'body': body,
+                'blog_id': blog_id
               })
+
+            # add timestamp index for post
+            post.add_index('timestamp_int', int(time()))
 
             blogs = client.bucket('blogs')
             blog = blogs.get(blog_id)
+            # add a link from blog to post
             blog.add_link(post)
-
+            # add a link from post to blog
             post.add_link(blog)
 
             blog.store()
@@ -88,23 +94,3 @@ if __name__ == '__main__':
 
     app.debug = True
     app.run()
-
-
-
-# classes & models
-
-class Post(object):
-
-    def __init__(self, title, body, blog):
-        self.blog = blog
-        self.title = title
-        self.body = body
-
-class Blog(object):
-
-    def __init__(self, title, author=None):
-        self.title = title
-        self.author = author
-
-    def getPosts(self):
-        pass
