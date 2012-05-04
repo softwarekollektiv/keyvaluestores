@@ -2,13 +2,52 @@
 
 ---
 
-# Simple Operations
+# Introduction
+
+* Tokyo-Cabinet
+* Riak
+* Voldemort
+* Scalaris
 
 ---
 
-# Hashing
+# Riak
 
 ---
+
+# Overview
+
+* written in erlang
+* developed by basho
+* free software
+* drivers in erlang, java, ruby, node
+
+---
+# Architecture
+ * advanced distributed Key-Value-Store
+
+---
+
+# Data Model
+
+* Buckets
+* Keys
+* Values
+
+---
+
+# Replication
+
+* *n_val*
+* *w*
+* *r*
+
+---
+
+# Query-Language
+* map/reduce
+* secondary indexes
+
 
 # Cosistent Hasing
 
