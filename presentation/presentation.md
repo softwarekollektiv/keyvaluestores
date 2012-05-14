@@ -232,7 +232,6 @@
 * insert(key,value)
 * lookup(key)
 
-
 ---
 # Delete inconsitstency possibility
 Replica: r1             r2              r3              r4 
@@ -248,7 +247,6 @@ Replica: r1             r2              r3              r4
 Version: 99             1               1               1 
 Value:   foo    bar             bar             bar 
 The next read can again return the item with version number 99. 
-
 ---
 
 # Architecture
@@ -264,7 +262,7 @@ The next read can again return the item with version number 99.
 
 # P2P layer
 
-* Chord# - distriuted dictionary
+* Chord# - distributed dictionary
 * key space is arbitrary set with total order
 * every node has a random key
 * logical ring + log_2(n) "fingers"
