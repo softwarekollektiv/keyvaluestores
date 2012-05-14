@@ -300,6 +300,13 @@ The next read can again return the item with version number 99.
 
 ---
 
-
-
+# Sources
+* Scalaris
+    * http://onscale.de/scalarix-learnmore.html
+    * http://www.zib.de/de/pvs/projekte/projektdetails/article/scalaris.html
+    * http://code.google.com/p/scalaris/
+* Voldemort
+    * http://project-voldemort.com/design.php
+    * http://project-voldemort.com/javadoc/all/
+    * 
 
