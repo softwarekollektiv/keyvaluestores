@@ -5,9 +5,10 @@
 # Introduction
 
 * Tokyo-Cabinet
-* Riak
 * Voldemort
+* Riak
 * Scalaris
+* Demo application
 
 ---
 
@@ -19,50 +20,17 @@
 
 
 ---
-# Architecture
-
----
-
-# Data Model
-
----
-
-# Replication
-
-
----
-
-# Query-Language
-
-
-# Cosistent Hasing
-
----
-
-# Horizontal Scaling
-
----
-
-# Eventual Cosistency
-
----
-
-# Data models (types)
-
----
-
-# Map/Reduce
-
----
 
 # Voldemort
+
 ![Alt text](images/voldemort.png)
 
-<!-- taken from Project Voldemort ppt from http://www.svforum.org/index.cfm?fuseaction=Document.filterdocumentlist&topicRadio=Topic&topicOnly=32&docPublishYear=getAllYears --!>
+<!-- taken from Project Voldemort ppt from http://www.svforum.org/index.cfm?fuseaction=Document.filterdocumentlist&topicRadio=Topic&topicOnly=32&docPublishYear=getAllYears -->
 
 ---
 
 # Overview
+
 * open-source reimplementation of Amazon Dynamo
 * started by linkedIn
 * latency is top priority
@@ -71,21 +39,24 @@
 * Clients in Java, Ruby, PHP, C++
 
 ---
+
 # Data Model
+
 * data in "stores"
 * keys in stores unique
 * one to many relations by lists
 * serialization pluggable
-** json
-** string
-** java-serialization
-** protobuf
-** identity (bytes)
-** write your own
+    * json
+    * string
+    * java-serialization
+    * protobuf
+    * identity (bytes)
+    * write your own
 
 ---
 
-#Basic Operations
+# Basic Operations
+
 * PUT
 * GET
 * GET\_ALL
@@ -93,13 +64,16 @@
 
 ---
 
----
 # Architecture
+
 ![Alt text](http://project-voldemort.com/images/logical_arch.png)
-<!-- taken from http://project-voldemort.com/design.php --!>
+
+<!-- taken from http://project-voldemort.com/design.php -->
+
 ---
 
-#Eventual consistency
+# Eventual consistency
+
 * Read-Repair
 * Hinted Handoff
     * any-handoff (to any server)
@@ -111,6 +85,7 @@
 ---
 
 # Replication
+
 * consistent hashing to store & retrieve data
     * replicas configurable
 * updates of outdated data by reads and writes
@@ -125,7 +100,7 @@
 # Overview
 
 * written in erlang
-* developed by basho
+* developed by Basho Technologies, Inc.
 * Enterprise and open source version
 * drivers in erlang, java, ruby, node
 
@@ -215,22 +190,28 @@
 ---
 
 # Map/Reduce
-* queries written in erlang or javascript
-* executed on all cluster nodes
+
+* queries written in:
+    * erlang
+    * javascript
+* executed on every node in the cluster
+
+---
 
 # Key-Filters
+
 * map/reduce queries over keys
 * can be used as input of a map/reduce job
-* predicates like
+* predicates like:
     * equal, greater than, member of set
-* logic operaters (and, or, not)
+* combine with logic operaters (and, or, not)
 
 # Secondary Indexes
 * Index on independent values
     * schema free
 * indexable types: int, binary
 * Local index per Partition
-* Query all hosts in the cluster
+* You have to query all hosts in the cluster
 
 ---
 
