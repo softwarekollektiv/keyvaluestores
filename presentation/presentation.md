@@ -18,8 +18,80 @@
 
 # Overview
 
+* key-value store
+* file/memory based storage engine
+* written in c
+* drivers/bindings for python, java, nodejs, ruby, etc.
+* developed by FAL Labs
+* free software (LGPL)
+* superseded by Kyoto Cabinet
 
 ---
+
+# Basic operations
+
+* PUT
+* GET
+* DELETE
+* KEYS
+* CONCAT
+
+---
+
+# Architecture
+
+* three ways to index:
+    * B+Tree
+    * hash table
+    * fixed-length array
+    * tables
+* thread safe library for processes
+    * read/write locks per record or file
+* write ahead logs
+* ACID
+
+---
+
+# Hash Database (TCHDB)
+
+* static hashing
+* unique keys
+* memory mapping of database file
+* compression e.g. deflate, bzip2
+* iteration (random order)
+* collision handled by separate chaining
+    * binary search tree
+
+---
+
+# B+Tree Database (TCBDB)
+
+* B+Tree index
+    * pages in a double linked list
+* duplicated keys possible
+* LRU page chaching
+* prexif/range queries through custom comparision function
+* cursors allow iteration over values in an order
+
+---
+
+# Fixed-length Database (TCFDB)
+
+* like an array
+* keys are natural numbers
+* time and space efficient
+* memory mapped database file
+
+---
+
+# Table Database (TCTBD)
+
+* column based
+    * primary key and named columns
+* query by column values
+    * B+Tree based index
+* lexical/decimal ordering by column values
+
 
 # Voldemort
 
