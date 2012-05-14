@@ -147,7 +147,7 @@
 
 ---
 
-# The Ring
+#qThe Ring
 
 * diveded into partitions
     * number of partitions is configurable
@@ -215,3 +215,93 @@
 ---
 
 # Overview
+* distributed key-value-store
+* based on a Distributed HashTable
+* written in Erlang
+* similar to Amazon's SimpleDB
+* ACID properties (!)
+* Zuse Institut Berlin, onScale solutions GmbH
+* funded by EU projects
+* Java, Python, Ruby APIs
+
+---
+#Basic Operations
+
+* delete(key) - only Erlang & Java
+** inconsistencies may occur!
+* insert(key,value)
+* lookup(key)
+
+
+---
+# Delete inconsitstency possibility
+Replica: r1             r2              r3              r4 
+Version: 99             99              99              99 
+Value:   foo    foo             foo             foo 
+Now, you try to delete the item, but miss one replica. 
+Replica: r1             r2              r3              r4 
+Version: 99             -               -               - 
+Value:   foo    -               -               - 
+Now, you try to create the item again with version number 1 and a new value, 
+but again you miss the first replica. 
+Replica: r1             r2              r3              r4 
+Version: 99             1               1               1 
+Value:   foo    bar             bar             bar 
+The next read can again return the item with version number 99. 
+
+---
+
+# Architecture
+
+* P2P layer
+* Replication layer
+* Transactional Layer
+* Application layer 
+
+
+---
+
+
+# P2P layer
+
+* Chord# - distriuted dictionary
+* key space is arbitrary set with total order
+* every node has a random key
+* logical ring + log_2(n) "fingers"
+
+* stored in lexicografical order
+* O(log(n)) routing performance
+
+---
+
+# Replication layer
+
+* in the following nodes
+
+---
+
+# Transactional layer
+
+* ACID properties
+* improved Paxos Commit Protocol
+
+---
+
+# consistency
+
+* key, versionNumber, value
+* highest versionNumber is determined then written
+* quorum based operations (read and write majority)
+
+
+* not persistent on disk
+* several database backends (tokyo cabinet,...)
+
+* crash-stop model
+    * n/2 servers have to be available else loss of data
+
+---
+
+
+
+
