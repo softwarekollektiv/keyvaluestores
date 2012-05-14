@@ -1,0 +1,43 @@
+VOLDEMORT
+---------
+* Kopie von Amazon Dynamo [2]
+* benannt nach Harry Potter Bösewicht [wiki]
+* API -> many simple gets; no joins; latency most important[1]
+* simple socket protocol[1]
+* started in linkedIn [1]
+* on github https://github.com/voldemort/voldemort#readme
+
+Storage Engines
+----------------
+MySQL
+in-memory
+read only (created in Hadoop)
+
+Data Model & Operations
+----------
+* Four operations: PUT, GET, GET_ALL, DELETE[1]
+* Data is organized into “stores”, i.e. tables[1]
+* stores equivallent to talbes (but 1 key 1 arbitrary value)[3]
+* one to many by supporting list [3] (too big number needs to be split)
+* serialization is pluggable [3]
+** json
+** string
+** java-serialization
+** protobuf
+** identity (gives back bytes)
+** write your own!
+*
+
+
+Replicationen
+-------------------
+consistent hashing to store & retreive data[3]
+reads and writes repair nodes with "old" data[1]
+if node to write down write anywhere else -> will try periodically to update [1]
+Versions by a Vector clock [1]
+no locking or blocking because of those clocks[1]
+
+
+[1] http://static.last.fm/johan/nosql-20090611/voldemort_nosql.pdf
+[2]project-voldemort.com/developer.php
+[3]http://project-voldemort.com/design.php
