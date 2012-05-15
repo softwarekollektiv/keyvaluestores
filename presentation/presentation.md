@@ -92,6 +92,7 @@
     * B+Tree based index
 * lexical/decimal ordering by column values
 
+---
 
 # Voldemort
 
