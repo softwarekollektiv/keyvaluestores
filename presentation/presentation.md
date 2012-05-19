@@ -142,24 +142,16 @@
 
 ---
 
-# Eventual consistency
-
-* Read-Repair
-* Hinted Handoff
-    * any-handoff (to any server)
-    * consisten-handoff (to server where replicas lie)
-    * proximity-handoff (to a server locally near)
-* writes can be done to every node (in emergency) - periodically tries to update correct node
-
-
----
-
 # Replication
 
 * consistent hashing to store & retrieve data
-    * replicas configurable
 * updates of outdated data by reads and writes
 * versions controlled by Vector Clock
+* Hinted Handoff
+    * any-handoff (to any server)
+    * consistent-handoff (to server where replicas lie)
+    * proximity-handoff (to a server geographical near)
+writes can be done to every node (in emergency) - periodically tries to update correct node
 
 ---
 # Storage Engines
@@ -356,6 +348,8 @@ The next read can again return the item with version number 99.
 * ACID properties
 * improved Paxos Commit Protocol
 
+<img src="images/scalaris_paxos.jpg" width="600"></img>
+
 ---
 
 # consistency
@@ -378,8 +372,11 @@ The next read can again return the item with version number 99.
     * http://onscale.de/scalarix-learnmore.html
     * http://www.zib.de/de/pvs/projekte/projektdetails/article/scalaris.html
     * http://code.google.com/p/scalaris/
+    * http://www.ist-selfman.org/wiki/images/0/0e/ZIBpaperOnPaxos.pdf
 * Voldemort
     * http://project-voldemort.com/design.php
     * http://project-voldemort.com/javadoc/all/
-    * 
+    * https://github.com/voldemort/voldemort/wiki/Hinted-Handoff
+
+
 
