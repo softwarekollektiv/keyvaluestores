@@ -97,6 +97,7 @@
 # Voldemort
 
 <img src="images/voldemort.png" width="400"></img>
+
 <!-- taken from Project Voldemort ppt from http://www.svforum.org/index.cfm?fuseaction=Document.filterdocumentlist&topicRadio=Topic&topicOnly=32&docPublishYear=getAllYears -->
 
 ---
@@ -212,7 +213,7 @@ writes can be done to every node (in emergency) - periodically tries to update c
 
 ---
 
-#qThe Ring
+# The Ring
 
 * diveded into partitions
     * number of partitions is configurable
@@ -266,6 +267,8 @@ writes can be done to every node (in emergency) - periodically tries to update c
     * equal, greater than, member of set
 * combine with logic operaters (and, or, not)
 
+---
+
 # Secondary Indexes
 * Index on independent values
     * schema free
@@ -293,12 +296,13 @@ writes can be done to every node (in emergency) - periodically tries to update c
 #Basic Operations
 
 * delete(key) - only Erlang & Java
-** inconsistencies may occur!
+    * inconsistencies may occur!
 * insert(key,value)
 * lookup(key)
 
 ---
 # Delete inconsitstency possibility
+
 Replica: r1             r2              r3              r4 
 Version: 99             99              99              99 
 Value:   foo    foo             foo             foo 
