@@ -241,12 +241,23 @@ writes can be done to every node (in emergency) - periodically tries to update c
 
 ---
 
-# Backends
+# Backends (Storage engines)
 
-* Storage engines
-    * leveldb, bitcask, in-memory, ...
+* leveldb
+    * Key-Value-Store
+    * persistent
+    * high throughput
+* bitcask
+    * all keys in memory
+    * write into memory then write to disk
+* in-memory
+    * every thing in memory
+    * time to live for key/value pairs
+* and others
 
 ---
+
+# Replication
 
 * Replication along the ring
 * configurable per bucket
