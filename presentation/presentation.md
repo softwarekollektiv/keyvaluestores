@@ -321,19 +321,19 @@ writes can be done to every node (in emergency) - periodically tries to update c
 ---
 # Delete inconsitstency possibility
 
-Replica: r1             r2              r3              r4
-Version: 99             99              99              99
-Value:   foo    foo             foo             foo
-Now, you try to delete the item, but miss one replica.
-Replica: r1             r2              r3              r4
-Version: 99             -               -               -
-Value:   foo    -               -               -
-Now, you try to create the item again with version number 1 and a new value,
-but again you miss the first replica.
-Replica: r1             r2              r3              r4
-Version: 99             1               1               1
-Value:   foo    bar             bar             bar
-The next read can again return the item with version number 99.
+    Replica: r1             r2              r3              r4
+    Version: 99             99              99              99
+    Value:   foo            foo             foo             foo
+    Now, you try to delete the item, but miss one replica.
+    Replica: r1             r2              r3              r4
+    Version: 99             -               -               -
+    Value:   foo            -               -               -
+    Now, you try to create the item again with version number 1 and a new value,
+    but again you miss the first replica.
+    Replica: r1             r2              r3              r4
+    Version: 99             1               1               1
+    Value:   foo            bar             bar             bar
+    The next read can again return the item with version number 99.
 ---
 
 # Architecture
