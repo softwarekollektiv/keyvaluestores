@@ -349,7 +349,7 @@ writes can be done to every node (in emergency) - periodically tries to update c
 * Java, Python, Ruby APIs
 
 ---
-#Basic Operations
+# Basic Operations
 
 * delete(key) - only Erlang & Java
     * inconsistencies may occur!
@@ -427,6 +427,68 @@ The next read can again return the item with version number 99.
 
 ---
 
+# Summary
+
+---
+
+# Demo
+
+---
+
+# Timeline (Secondary Index)
+
+Implement a timeline. Show blog posts in the last 5 minutes.
+
+    !python
+    client = riak.RiakClient()
+
+    # compute time range
+    end_time = int(time())
+    start_time = end_time - 60*5
+
+    # use a secondary index to fetch blog posts in the last 5 minutes
+    post_links = client.index('posts', 'timestamp_int', start_time, end_time).run()
+
+    # get actual data
+    posts = [link.get().get_data() for link in post_links]
+
+---
+
+# Blogs and blog posts (link walking)
+
+Get meta information about a blog and all blog posts.
+
+    !python
+    blogs = client.bucket('blogs') #bucket
+    blog = blogs.get(blog_id) #blog (value)
+
+    links = blog.get_links() # links
+
+    # fetch all blog posts via link walking
+    posts = [link.get().get_data() for link in links]
+    blog = {
+      'id': blog_id,
+      'posts' : posts
+    }
+
+---
+
+# Deployment
+
+Install:
+
+    git clone https://github.com/basho/riak.git
+    cd riak
+    make rel
+    ./rel/riak/bin/riak start
+
+Join the cluster:
+
+    ./rel/riak/bin/riak-admin join dev1@127.0.0.1
+    ./rel/riak/bin/riak-admin status
+
+---
+
 # Sources
 * Scalaris
     * http://onscale.de/scalarix-learnmore.html
@@ -437,6 +499,5 @@ The next read can again return the item with version number 99.
     * http://project-voldemort.com/design.php
     * http://project-voldemort.com/javadoc/all/
     * https://github.com/voldemort/voldemort/wiki/Hinted-Handoff
-
-
-
+* Riak
+* Tokyo Cabinet
