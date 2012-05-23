@@ -151,7 +151,7 @@
 
 ---
 
-# eventual consistency
+# Eventual Consistency
 
 * write to up to all replicas
 * read-repair
@@ -412,7 +412,9 @@ writes can be done to every node (in emergency) - periodically tries to update c
 
 # Replication layer
 
-* in the following nodes
+* symmetric replication
+
+<img src="images/sym_rep.jpg" width="800"></img>
 
 ---
 
@@ -421,20 +423,17 @@ writes can be done to every node (in emergency) - periodically tries to update c
 * ACID properties
 * improved Paxos Commit Protocol
 
-<img src="images/scalaris_paxos.jpg" width="600"></img>
+<img src="images/scalaris_paxos.jpg" width="800"></img>
 
 ---
 
-# consistency
+# Consistency
 
 * key, versionNumber, value
 * highest versionNumber is determined then written
 * quorum based operations (read and write majority)
-
-
 * not persistent on disk
 * several database backends (tokyo cabinet,...)
-
 * crash-stop model
     * n/2 servers have to be available else loss of data
 
@@ -442,9 +441,10 @@ writes can be done to every node (in emergency) - periodically tries to update c
 
 # Summary
 
-* p2p based key/value store
+* P2P based key-value store
 * ACID properties
-* not persistent
+* not in memory
+    -> not persistent
 
 
 ---
@@ -513,6 +513,7 @@ Join the cluster:
     * http://www.zib.de/de/pvs/projekte/projektdetails/article/scalaris.html
     * http://code.google.com/p/scalaris/
     * http://www.ist-selfman.org/wiki/images/0/0e/ZIBpaperOnPaxos.pdf
+    * http://www.sics.se/~ali/publications/replication.pdf
 * Voldemort
     * http://project-voldemort.com/design.php
     * http://project-voldemort.com/javadoc/all/
