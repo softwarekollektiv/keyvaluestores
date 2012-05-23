@@ -151,16 +151,23 @@
 
 ---
 
-# Replication
+# eventual consistency
 
-* consistent hashing to store & retrieve data
-* updates of outdated data by reads and writes
-* versions controlled by Vector Clock
+* write to up to all replicas
+* read-repair
 * Hinted Handoff
     * any-handoff (to any server)
     * consistent-handoff (to server where replicas lie)
     * proximity-handoff (to a server geographical near)
 writes can be done to every node (in emergency) - periodically tries to update correct node
+
+---
+
+# Replication
+
+* consistent hashing to store & retrieve data
+* updates of outdated data by reads and writes
+* versions controlled by Vector Clock
 
 ---
 # Storage Engines
@@ -359,18 +366,24 @@ writes can be done to every node (in emergency) - periodically tries to update c
 ---
 # Delete inconsitstency possibility
 
+
     Replica: r1             r2              r3              r4
     Version: 99             99              99              99
     Value:   foo            foo             foo             foo
+
     Now, you try to delete the item, but miss one replica.
+
     Replica: r1             r2              r3              r4
     Version: 99             -               -               -
     Value:   foo            -               -               -
+
     Now, you try to create the item again with version number 1 and a new value,
     but again you miss the first replica.
+
     Replica: r1             r2              r3              r4
     Version: 99             1               1               1
     Value:   foo            bar             bar             bar
+
     The next read can again return the item with version number 99.
 ---
 
@@ -428,6 +441,11 @@ writes can be done to every node (in emergency) - periodically tries to update c
 ---
 
 # Summary
+
+* p2p based key/value store
+* ACID properties
+* not persistent
+
 
 ---
 
