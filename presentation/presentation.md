@@ -264,6 +264,18 @@ writes can be done to every node (in emergency) - periodically tries to update c
 
 ---
 
+# Replication
+
+* Replication along the ring
+* configurable per bucket
+* handoff protocoll if nodes are unavailable
+* *n_val*: number of copies stored in the cluster
+* *w*: number of nodes that must return for successful read
+* *r*: number of nodes that must return for successful write
+* "no guarantees that the three replicas will go to three separate physical nodes"
+
+---
+
 # Backends (Storage engines)
 
 * leveldb
@@ -277,18 +289,6 @@ writes can be done to every node (in emergency) - periodically tries to update c
     * every thing in memory
     * time to live for key/value pairs
 * and others
-
----
-
-# Replication
-
-* Replication along the ring
-* configurable per bucket
-* handoff protocoll if nodes are unavailable
-* *n_val*: number of copies stored in the cluster
-* *w*: number of nodes that must return for successful read
-* *r*: number of nodes that must return for successful write
-* "no guarantees that the three replicas will go to three separate physical nodes"
 
 ---
 
