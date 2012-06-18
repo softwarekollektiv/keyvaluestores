@@ -1,5 +1,5 @@
 % Key-Value-Stores
-% Philipp Borgers \ Felix H...
+% Philipp Borgers \ Felix Höffken
 
 # Abstract
 
@@ -104,6 +104,69 @@ anzulegen um Anfragen, die sich auf Spalten beziehen zu beschleunigen.
 
 # Voldemort
 
+Voldemort ist eine open-source Nachimplementierung von *Amazon Dynamo*, einem 
+verteilten Key-Value-Store, dessen Priorität eine geringe Latenzzeiz ist. 
+Entwickelt wird er von der *LinkedIn Corporation*. Der Code ist in Java 
+geschrieben und ist auf *github* einsehbar. 
+Für die Entwickler werden Treiber in Java, Ruby, PHP und C++ zur Verfügung 
+gestellt.
+
+Voldemort nutzt *Consistent Hashing* zum verteilen und replizieren der Daten und
+garantiert *Eventual Consistency*. Alle Knoten können Anfragen beantworten oder
+- falls nötig - an andere Knoten weiterleiten
+
+Voldemort bietet nur vier Operationen an, die mit den Daten interagieren können.* PUT
+* GET
+* GET\_ALL
+* DELETE
+
+Hierbei bietet die *GET\_ALL* Operation die möglichkeit mehrere Werte auf einmal auszulesen.
+
+## Datenmodell
+
+In einer Voldemort Datenbank können mehrere *Stores* existieren. In selbigen 
+werden Key-Value Paare gespeichert, wobei der Schlüssel eines solchen Paares in 
+dem Store eindeutig sein muss.
+Wie die Daten gespeichert und übertragen werden kann in jedem Store eingestellt 
+werden. Von Haus aus wird das json-Format, die Java Serialisierung, Googles 
+Protobuff, das Avro Serialisierungssystem, das Speichern als String und als 
+Bytearray unterstützt.
+Desweiteren existiert eine Schnittstelle, die jede/n Entwickler/in ermöglichen 
+soll eine eigene Serialisierungsmethode zu implementieren.
+
+Es existieren mehrere Möglichkeiten die Daten zu persistieren. Standardmäßig 
+wird *BDB Java Edition* genutzt, allerdings ist auch eine *MySQL*-Datenbank ein 
+mögliches Backend. Eine weitere Möglichkeit ist, den Key-Value Store read-only 
+zu nutzen, was die Lesezugriffe beschleunigt. *LinkedIn* nutzt laut eigenen 
+Angaben fast ausschließlich diese Methode.
+Hierzu muss die Datenbank per Hadoop generiert werden und kann ohne ausschlaten
+des Systems übernommen werden.
+
+## Eventual Consistency
+
+Für jeden Store kann eingestellt werden, wie viele der Knoten, die Replikate 
+speichern, die neuen Daten erhalten haben müssen, bevor ein Schreibvorgang als 
+erfolgreich gilt.
+Standardmäßig werden für Lese- und Schreibzugriffe eine Mindestquote von 50% 
+benötigt. So kann garantiert werden, dass das richtige Ergebnis gelesen wird.
+*Eventual consistency* entsteht im Zusammenspiel mit *read-repair*. Hierbei 
+werden alle Knoten, die eine Antwort geben und noch veraltete Daten besitzen auf
+den neusten Stand gebracht, bevor die Antwort an den Nutzer erfolgt. Ob ein Knoten eine veraltete Version besitzt wird mithilfe einer *Vector Clock* bestimmt.
+
+Um die Konsistenz auch zu ermöglichen, falls ein Knoten offline ist, wird 
+*Hinted-Handoff* benutzt. Die Updates werden an einen Server geschickt, welcher 
+periodisch überprüft, ob der zuständige Knoten wieder erreichbar ist. Falls dies
+zutrifft werden die Daten an den Server übertragen und auf den neusten Stand 
+gebracht.
+Hierbei gibt es drei Möglichkeiten zu bestimmen, welcher Knoten hierfür genutzt 
+wird. Bei *Any-Handoff* wird zufällig irgendein erreichbarer Knoten genutzt. Bei
+*Consistent-Handoff* wird -falls erreichbar- ein Server genutzt, der die 
+Replkate speichert. Bei *Proximity-Handoff* wird ein Knoten genutzt, der 
+geografisch nah am Offline-Knoten liegt. Diese Möglichkeit kann nur genutzt 
+werden, wenn den Knoten beim Start manuell ein Index zugeordnet wurde, der die geografische Lage beschreibt.
+
+
+
 # Riak
 
 Riak ist ein verteilter Key-Value-Store, der zur Zeit von *Bacho Technologies
@@ -133,5 +196,67 @@ Bucket-Key Tuple, die anderen Key-Value Paare referenzieren.
 ## 
 
 # Scalaris
+
+Scalaris ist ein verteilter in Erlang geschriebener Key-Value-Store. Er bietet 
+*ACID*-Eigenschaften und basiert auf einer *Distributed HashTable*. Die 
+Entwicklung begann im *Zuse Institut Berlin* mit EU-Fördermitteln. Allerdings 
+existiert inzwischen auch die Firma *onScale solutions GmbH*, die eine 
+kommerzielle Version anbieten. 
+Treiber existieren momentan für Erlang, Java, Python und Ruby.
+
+Scalaris bietet nur die drei Standardoperationen eines Key-Value-Stores:
+* insert
+* lookup
+* delete
+
+Wobei zu beachten ist, dass die delete Funktion bisher nur in Erlang und Java 
+zur Verfügung steht. Die Entwickler haben die Funktion auf mehrfachen Wunsch der
+Community eingeführt, obwohl es zu Inkonsistenzen kommen kann, wenn ein Datum 
+gelöscht und neu gespeichert wird, während ein Knoten offline ist.
+Aufgrund der Versionsnummer wird der alte Wert als neuer angenommen und 
+zurückgegeben.
+
+## Replikationen
+
+Das P2P Layer ist für die Verteilung der Daten und Replikate verantwortlich. 
+*Chord#* ist die Grundlage des Systems. Es ist ein *verteiltes Wörterbuch*, bei 
+dem jedem Knoten ein zufälliger Schlüssel zugeordnet wird. Der Schlüssel kann 
+hierbei aus einem beliebigen Set bestehen, welches geordnet werden kann. Im 
+Normalfall werden Strings genutzt.
+Jeder Knoten ist für die Replikate zwischen dem eigenen Schlüssel und dem 
+Schlüssel des Nachfolgers verantwortlich.
+Knoten besitzen sogenannte *Finger* auf andere Knoten im Ring, wodurch die Suche
+beschleunigt werden kann, indem, anstatt die Anfrage einfach an den 
+Nachfolgeknoten weiter zu gegeben, einige Knoten übersprungen werden können.
+
+Zur Replikation wird *Symmetric Replication* genutzt, was bedeutet, dass die 
+Replikate nicht in den nachfolgenden Knoten liegen, sondern in regelmäßigen 
+Intervallen auf dem Ring. Die Anzahl der Replikate kann konfiguriert werden.
+
+## Transaktionen
+
+Die ACID-Eigenschaften von Scalaris werden mit Hilfe des *Paxos-Protokolls* 
+erreicht. Hierbei gibt es einen *Transaction Manager* und mehrere *Replicate Transaction Manager*, die im Falle eines Ausfalls des Transaction Managers seine Rolle übernehmen können.
+Der Transaction Manager verschickt eine Update-Nachricht an die Knoten, die die 
+Replikate halten. Die Knoten blockieren die nötigen Daten und melden zurück ob 
+sie schreiben können, oder nicht. Melden sich mindestens 50% der Knoten zurück 
+und können schreiben, löst der Transaction Manager die Transaktion aus, sonst 
+bricht er die Operation ab. 
+
+## Konsistenz
+
+Jedes Key-Value-Paar bestitzt eine Versionsnummer, die bei einem Update, welches
+mittels insert aufgerufen wird, erhöht wird. Um einen erfolgreichen Lesezugriff
+ausführen zu können müssen 50% der Knoten antworten. Das Paar mit der höchsten
+Versionsnummer wird zurückgegeben. Da immer über 50% der Knoten den neusten
+Zustand eines Paares haben müssen wird immer die aktuellste Version 
+zurückgegeben. Hierbei ist allerdings auf das schon angesprochene Problem beim 
+Löschen zu achten.
+Die Daten sind nicht persistent. Zwar können die Daten auch auf die Festplatte 
+geschrieben werden zum Beispiel mit *Tokio Cabinet*, allerdings werden die 
+Updates erst im Arbeitsspeicher gehalten, bevor sie persistiert werden.
+So können updates verloren gehen.
+Dies bedeuted, dass immer mindestens 50% der Server erreichbar sein müssen, da
+es sonst zu einem möglichen Datenverlust kommt.
 
 # Summary
