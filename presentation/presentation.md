@@ -84,7 +84,7 @@
 
 ---
 
-# Table Database (TCTBD)
+# Table Database (TCTDB)
 
 * column based
     * primary key and named columns
@@ -270,8 +270,8 @@ writes can be done to every node (in emergency) - periodically tries to update c
 * configurable per bucket
 * handoff protocoll if nodes are unavailable
 * *n_val*: number of copies stored in the cluster
-* *w*: number of nodes that must return for successful read
-* *r*: number of nodes that must return for successful write
+* *w*: number of nodes that must return for successful write
+* *r*: number of nodes that must return for successful read
 * "no guarantees that the three replicas will go to three separate physical nodes"
 
 ---
