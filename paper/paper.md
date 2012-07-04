@@ -12,7 +12,7 @@
 Tokyo Cabinet ist ein dateibasierter Key-Value Store.
 Der C-Code steht unter einer LGPL-Lizenz und wird von FAL Labs verwaltet. Für
 Toyko Cabinet stehen in den verschiedensten Programmiersprachen Treiber bereit.
-Python, java, nodejs und ruby sind nur einige Beispiele. Inzwischen
+Python, Java, NodeJS und Ruby sind nur einige Beispiele. Inzwischen
 wurde Tokyo Cabinet von seinem Nachfolger Kyoto Cabinet abgelöst,
 behält jedoch immer noch seine Bedeutung bei durch seine Bekanntheit
 unter vielen Entwicklern.
@@ -21,7 +21,7 @@ Tokyo Cabinet ist eine Bibliothek, die sich auf Prozessebene einbinden
 lässt. Datenbanken werden in Dateien angelegt und verwaltet. Es stehen
 insgesamt vier Varianten zur Verfügung um Datenbank anzulegen, die sich durch
 die Art der Indizierung der Daten unterscheiden. Im Folgenden werden wir auf
-die vier Datenbanktypen eingehen: B+Tree, hash, fixed-length, tables. Der
+die vier Datenbanktypen eingehen: B+Tree, hash, fixed-length und tables. Der
 Vollständigkeit wegen sei noch erwähnt, dass es ebenfalls möglich ist
 in-memory Datenbanken anzulegen.
 Alle Datenbanktypen teilen sich ein gemeinsames
@@ -51,7 +51,7 @@ Datenbank zu berechnen. Dies gilt für die drei Operation: put, get, delete.
 Die Schlüssel mit denen die Datenbank arbeiten soll. müssen eindeutig sein.
 Wird ein Schlüssel mehrfach verwendet, werden die Daten an der entsprechenden
 Stelle überschrieben und somit verhindert, dass die Datenbank im ungünstigen
-Fall zu einer Liste entartet. Die *KEYS*-Operation liefert die Keys der in
+Fall zu einer Liste entartet. Die *KEYS*-Operation liefert die Keys in
 ungeordneter Reihenfolge zurück.
 
 Um die Zugriffszeit zu minimieren werden Teile der Hash-Datenbank in
@@ -69,7 +69,7 @@ Tree verwaltet.
 In B+Tree Datenbanken werden die Daten durch einen B+Tree indiziert und
 somit in eine totale Ordnung gebracht. Die Pages des B+Trees werden
 zusätzlich in einer
-doppelt-verketteten List verwaltet. Die Verkettung der Pages erlaubt es
+doppelt-verketteten Liste verwaltet. Die Verkettung der Pages erlaubt es
 effizient den n-ten Nachbarn eines Knotens im B+Tree zu finden ohne den Baum
 traversieren zu müssen. Im Falle der B+Tree Datenbanken ist es möglich einen
 Key mehr als einmal zu verwenden, da die Ordnug im B+Tree auch für gleiche
@@ -90,7 +90,7 @@ Datenbank aus natürlichen Zahlen bestehen. Die Datenbank wird wie bei den
 Hash Datenbanken in den Hauptspeicher gemapt um den Zugriff zu beschleunigen.
 
 Die Fixed-length Datenbank hat die besten Eigenschaften in Bezug auf Speicher
-und Zugriffszeit, birgt aber u.a. die Nachteil, dass sie nicht beliebig groß
+und Zugriffszeit, birgt aber unter anderem die Nachteile, dass sie nicht beliebig groß
 werden kann und die Schlüssel in keiner Ordnung zueinander stehen.
 
 ## Table Datenbanken (TCTDB)
@@ -105,17 +105,17 @@ anzulegen um Anfragen, die sich auf Spalten beziehen zu beschleunigen.
 # Voldemort
 
 Voldemort ist eine open-source Nachimplementierung von *Amazon Dynamo*, einem
-verteilten Key-Value-Store, dessen Priorität eine geringe Latenzzeiz ist.
-Entwickelt wird er von der *LinkedIn Corporation*. Der Code ist in Java
-geschrieben und ist auf *github* einsehbar.
+verteilten Key-Value-Store, dessen Priorität eine geringe Latenzzeit ist.
+Entwickelt wird Voldemort von der *LinkedIn Corporation*. Der Code ist in Java
+geschrieben und auf *github* einsehbar.
 Für die Entwickler werden Treiber in Java, Ruby, PHP und C++ zur Verfügung
 gestellt.
 
 Voldemort nutzt *Consistent Hashing* zum verteilen und replizieren der Daten und
 garantiert *Eventual Consistency*. Alle Knoten können Anfragen beantworten oder
-- falls nötig - an andere Knoten weiterleiten
+- falls nötig - an andere Knoten weiterleiten.
 
-Voldemort bietet nur vier Operationen an, die mit den Daten interagieren können.
+Voldemort bietet vier Operationen an, die mit den Daten interagieren können.
 
 * PUT
 * GET
@@ -129,20 +129,17 @@ Hierbei bietet die *GET\_ALL* Operation die Möglichkeit mehrere Werte auf einma
 In einer Voldemort Datenbank können mehrere *Stores* existieren. In selbigen
 werden Key-Value Paare gespeichert, wobei der Schlüssel eines solchen Paares in
 dem Store eindeutig sein muss.
-Wie die Daten gespeichert und übertragen werden kann in jedem Store eingestellt
-werden. Von Haus aus wird das json-Format, die Java Serialisierung, Googles
-Protobuff, das Avro Serialisierungssystem, das Speichern als String und als
-Bytearray unterstützt.
-Desweiteren existiert eine Schnittstelle, die jede/n Entwickler/in ermöglichen
-soll eine eigene Serialisierungsmethode zu implementieren.
+Wie die Daten gespeichert und übertragen werden, kann in jedem Store eingestellt
+werden. Von Haus aus wird unter anderem das json-Format, die Java Serialisierung, Googles
+Protobuff und das Speichern als String, sowie als Bytearray unterstützt.
+Desweiteren existiert eine Schnittstelle, die ermöglicht eine eigene Serialisierungsmethode 
+zu implementieren.
 
-Es existieren mehrere Möglichkeiten die Daten zu persistieren. Standardmäßig
+Es existieren mehrere Optionen die Daten zu persistieren. Standardmäßig
 wird *BDB Java Edition* genutzt, allerdings ist auch eine *MySQL*-Datenbank ein
 mögliches Backend. Eine weitere Möglichkeit ist, den Key-Value Store read-only
-zu nutzen, was die Lesezugriffe beschleunigt. *LinkedIn* nutzt laut eigenen
-Angaben fast ausschließlich diese Methode.
-Hierzu muss die Datenbank per Hadoop generiert werden und kann ohne ausschlaten
-des Systems übernommen werden.
+zu nutzen, was die Lesezugriffe beschleunigt. Hierbei wird *Hadoop* zur Speicherung der Daten genutzt. 
+*LinkedIn* nutzt laut eigenen Angaben fast ausschließlich diese Methode.
 
 ## Eventual Consistency
 
@@ -153,7 +150,8 @@ Standardmäßig werden für Lese- und Schreibzugriffe eine Mindestquote von 50%
 benötigt. So kann garantiert werden, dass das richtige Ergebnis gelesen wird.
 *Eventual consistency* entsteht im Zusammenspiel mit *read-repair*. Hierbei
 werden alle Knoten, die eine Antwort geben und noch veraltete Daten besitzen auf
-den neusten Stand gebracht, bevor die Antwort an den Nutzer erfolgt. Ob ein Knoten eine veraltete Version besitzt wird mithilfe einer *Vector Clock* bestimmt.
+den neusten Stand gebracht, bevor die Antwort an den Nutzer erfolgt. Ob ein Knoten 
+eine veraltete Version besitzt wird mithilfe einer *Vector Clock* bestimmt.
 
 Um die Konsistenz auch zu ermöglichen, falls ein Knoten offline ist, wird
 *Hinted-Handoff* benutzt. Die Updates werden an einen Server geschickt, welcher
@@ -161,9 +159,9 @@ periodisch überprüft, ob der zuständige Knoten wieder erreichbar ist. Falls d
 zutrifft werden die Daten an den Server übertragen und auf den neusten Stand
 gebracht.
 Hierbei gibt es drei Möglichkeiten zu bestimmen, welcher Knoten hierfür genutzt
-wird. Bei *Any-Handoff* wird zufällig irgendein erreichbarer Knoten genutzt. Bei
+werden soll. Bei *Any-Handoff* wird zufällig irgendein erreichbarer Knoten genutzt. Bei
 *Consistent-Handoff* wird -falls erreichbar- ein Server genutzt, der die
-Replkate speichert. Bei *Proximity-Handoff* wird ein Knoten genutzt, der
+Replikate speichert. Bei *Proximity-Handoff* wird ein Knoten genutzt, der
 geografisch nah am Offline-Knoten liegt. Diese Möglichkeit kann nur genutzt
 werden, wenn den Knoten beim Start manuell ein Index zugeordnet wurde, der die geografische Lage beschreibt.
 
@@ -176,7 +174,7 @@ Inc.* verwaltet und weiter entwickelt wird. Riak steht in zwei Varianten zur
 Verfügung, einer Enterprise und einer Open-Source Version. Die Enterprise
 Version unterstützt im Gegensatz zur Open-Source Version z.B. effiziente Replikation
 über Rechenzentren hinweg. Für Entwickler stehen Treiber in verschieden
-Sprachen zur Verfügung, z.B. Erlang, Java, Ruby, node.js.
+Sprachen zur Verfügung, z.B. Erlang, Java, Ruby, NodeJS.
 
 Riak verteilt und repliziert Daten auf Basis von *Consistent Hashing* und
 garantiert *Eventual Consistency*. Alle Knoten in einem Riak-Cluster sind
@@ -216,7 +214,7 @@ Anfragen an einen Index (equal, less/greater then, member of) und können
 durch logische Operatoren (and, or, not) beliebig kombiniert werden.
 Außerdem bietet Riak die Möglichkeit *Secondary Indexes* anzulegen und
 diese per Map/Reduce abzufragen. Es stehen zwei Index-Typen zur Verfügung für
-binäre Daten und Integer. Die indizierten Daten sind unabhängig vom eigentlich
+binäre Daten und Integer. Die indizierten Daten sind unabhängig vom eigentlichen
 Wert (Value) der gespeichert wird (schema free). Für ein Key-Value-Paar
 können mehrere Indizes erstellt werden. Indizes werden adhoc mit der ersten
 Anfrage erstellt, die einen neuen Index enthält.
@@ -259,12 +257,13 @@ Time-To-Live mit zugeben.
 
 Scalaris ist ein verteilter in Erlang geschriebener Key-Value-Store. Er bietet
 *ACID*-Eigenschaften und basiert auf einer *Distributed HashTable*. Die
-Entwicklung begann im *Zuse Institut Berlin* mit EU-Fördermitteln. Allerdings
-existiert inzwischen auch die Firma *onScale solutions GmbH*, die eine
+Entwicklung begann im *Zuse Institut Berlin* mit EU-Fördermitteln.
+Inzwischen existiert auch die Firma *onScale solutions GmbH*, die eine
 kommerzielle Version anbieten.
 Treiber existieren momentan für Erlang, Java, Python und Ruby.
 
 Scalaris bietet nur die drei Standardoperationen eines Key-Value-Stores:
+
 * insert
 * lookup
 * delete
@@ -273,16 +272,15 @@ Wobei zu beachten ist, dass die delete Funktion bisher nur in Erlang und Java
 zur Verfügung steht. Die Entwickler haben die Funktion auf mehrfachen Wunsch der
 Community eingeführt, obwohl es zu Inkonsistenzen kommen kann, wenn ein Datum
 gelöscht und neu gespeichert wird, während ein Knoten offline ist.
-Aufgrund der Versionsnummer wird der alte Wert als neuer angenommen und
-zurückgegeben.
+Aufgrund der Versionsnummer wird der alte Wert des zu diesem Zeitpunk nicht 
+erreichbaren Knotens als neuester angenommen und zurückgegeben.
 
 ## Replikationen
 
 Das P2P Layer ist für die Verteilung der Daten und Replikate verantwortlich.
 *Chord#* ist die Grundlage des Systems. Es ist ein *verteiltes Wörterbuch*, bei
 dem jedem Knoten ein zufälliger Schlüssel zugeordnet wird. Der Schlüssel kann
-hierbei aus einem beliebigen Set bestehen, welches geordnet werden kann. Im
-Normalfall werden Strings genutzt.
+hierbei aus einem beliebigen Set bestehen, welches geordnet werden kann. 
 Jeder Knoten ist für die Replikate zwischen dem eigenen Schlüssel und dem
 Schlüssel des Nachfolgers verantwortlich.
 Knoten besitzen sogenannte *Finger* auf andere Knoten im Ring, wodurch die Suche
@@ -296,7 +294,8 @@ Intervallen auf dem Ring. Die Anzahl der Replikate kann konfiguriert werden.
 ## Transaktionen
 
 Die ACID-Eigenschaften von Scalaris werden mit Hilfe des *Paxos-Protokolls*
-erreicht. Hierbei gibt es einen *Transaction Manager* und mehrere *Replicate Transaction Manager*, die im Falle eines Ausfalls des Transaction Managers seine Rolle übernehmen können.
+erreicht. Hierbei gibt es einen *Transaction Manager* und mehrere *Replicate Transaction 
+Manager*, die im Falle eines Ausfalls des Transaction Managers seine Rolle übernehmen können.
 Der Transaction Manager verschickt eine Update-Nachricht an die Knoten, die die
 Replikate halten. Die Knoten blockieren die nötigen Daten und melden zurück ob
 sie schreiben können, oder nicht. Melden sich mindestens 50% der Knoten zurück
@@ -315,7 +314,7 @@ Löschen zu achten.
 Die Daten sind nicht persistent. Zwar können die Daten auch auf die Festplatte
 geschrieben werden zum Beispiel mit *Tokio Cabinet*, allerdings werden die
 Updates erst im Arbeitsspeicher gehalten, bevor sie persistiert werden.
-So können updates verloren gehen.
+So können Updates verloren gehen.
 Dies bedeuted, dass immer mindestens 50% der Server erreichbar sein müssen, da
 es sonst zu einem möglichen Datenverlust kommt.
 
