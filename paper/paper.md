@@ -3,17 +3,17 @@
 
 # Einleitung
 
-In diesem Paper beschäftigen wir uns mit Key-Value-Stores, erklären die 
-Begrifflichkeit und betrachten 4 verschiedene Key-Value-Stores hinsichtlich 
-des verwendeten Datenmodells, der Konsistenz, Replikation und ob sie 
+In diesem Paper beschäftigen wir uns mit Key-Value-Stores, erklären die
+Begrifflichkeit und betrachten vier verschiedene Key-Value-Stores hinsichtlich
+des verwendeten Datenmodells, der Konsistenz, Replikation und ob sie
 Transaktionen unterstützen.
 Die betrachteten Key-Value-Stores sind Tokyo Cabinet, Voldemort, Riak und Scalaris.
 
 # Key-Value-Stores
 
-Key-Value-Stores sind Datenbanken, die Daten in Key-Value-Paaren speichern. 
-Der Key (Schlüssel) verweist genau auf ein Datum bzw. Wert (Value). Theoretisch 
-kann man sich Key-Value-Stores als eine Tabelle mit nur 2 Spalten vorstellen, 
+Key-Value-Stores sind Datenbanken, die Daten in Key-Value-Paaren speichern.
+Der Key (Schlüssel) verweist genau auf ein Datum bzw. Wert (Value). Theoretisch
+kann man sich Key-Value-Stores als eine Tabelle mit nur 2 Spalten vorstellen,
 wobei der erste Wert der eindeutige Schlüssel ist.
 Wir unterscheiden zwischen lokalen und verteilten Key-Value-Stores, die entweder
 nur auf einem System laufen (lokal) oder über mehrere Rechner verteilt sind.
@@ -143,13 +143,13 @@ dem Store eindeutig sein muss.
 Wie die Daten gespeichert und übertragen werden, kann in jedem Store eingestellt
 werden. Von Haus aus wird unter anderem das json-Format, die Java Serialisierung, Googles
 Protobuff und das Speichern als String, sowie als Bytearray unterstützt.
-Desweiteren existiert eine Schnittstelle, die ermöglicht eine eigene Serialisierungsmethode 
+Desweiteren existiert eine Schnittstelle, die ermöglicht eine eigene Serialisierungsmethode
 zu implementieren.
 
 Es existieren mehrere Optionen die Daten zu persistieren. Standardmäßig
 wird *BDB Java Edition* genutzt, allerdings ist auch eine *MySQL*-Datenbank ein
 mögliches Backend. Eine weitere Möglichkeit ist, den Key-Value Store read-only
-zu nutzen, was die Lesezugriffe beschleunigt. Hierbei wird *Hadoop* zur Speicherung der Daten genutzt. 
+zu nutzen, was die Lesezugriffe beschleunigt. Hierbei wird *Hadoop* zur Speicherung der Daten genutzt.
 *LinkedIn* nutzt laut eigenen Angaben fast ausschließlich diese Methode.
 
 ## Eventual Consistency
@@ -161,7 +161,7 @@ Standardmäßig werden für Lese- und Schreibzugriffe eine Mindestquote von 50%
 benötigt. So kann garantiert werden, dass das richtige Ergebnis gelesen wird.
 *Eventual consistency* entsteht im Zusammenspiel mit *read-repair*. Hierbei
 werden alle Knoten, die eine Antwort geben und noch veraltete Daten besitzen auf
-den neusten Stand gebracht, bevor die Antwort an den Nutzer erfolgt. Ob ein Knoten 
+den neusten Stand gebracht, bevor die Antwort an den Nutzer erfolgt. Ob ein Knoten
 eine veraltete Version besitzt wird mithilfe einer *Vector Clock* bestimmt.
 
 Um die Konsistenz auch zu ermöglichen, falls ein Knoten offline ist, wird
@@ -283,7 +283,7 @@ Wobei zu beachten ist, dass die delete Funktion bisher nur in Erlang und Java
 zur Verfügung steht. Die Entwickler haben die Funktion auf mehrfachen Wunsch der
 Community eingeführt, obwohl es zu Inkonsistenzen kommen kann, wenn ein Datum
 gelöscht und neu gespeichert wird, während ein Knoten offline ist.
-Aufgrund der Versionsnummer wird der alte Wert des zu diesem Zeitpunk nicht 
+Aufgrund der Versionsnummer wird der alte Wert des zu diesem Zeitpunk nicht
 erreichbaren Knotens als neuester angenommen und zurückgegeben.
 
 ## Replikationen
@@ -291,7 +291,7 @@ erreichbaren Knotens als neuester angenommen und zurückgegeben.
 Das P2P Layer ist für die Verteilung der Daten und Replikate verantwortlich.
 *Chord#* ist die Grundlage des Systems. Es ist ein *verteiltes Wörterbuch*, bei
 dem jedem Knoten ein zufälliger Schlüssel zugeordnet wird. Der Schlüssel kann
-hierbei aus einem beliebigen Set bestehen, welches geordnet werden kann. 
+hierbei aus einem beliebigen Set bestehen, welches geordnet werden kann.
 Jeder Knoten ist für die Replikate zwischen dem eigenen Schlüssel und dem
 Schlüssel des Nachfolgers verantwortlich.
 Knoten besitzen sogenannte *Finger* auf andere Knoten im Ring, wodurch die Suche
@@ -305,7 +305,7 @@ Intervallen auf dem Ring. Die Anzahl der Replikate kann konfiguriert werden.
 ## Transaktionen
 
 Die ACID-Eigenschaften von Scalaris werden mit Hilfe des *Paxos-Protokolls*
-erreicht. Hierbei gibt es einen *Transaction Manager* und mehrere *Replicate Transaction 
+erreicht. Hierbei gibt es einen *Transaction Manager* und mehrere *Replicate Transaction
 Manager*, die im Falle eines Ausfalls des Transaction Managers seine Rolle übernehmen können.
 Der Transaction Manager verschickt eine Update-Nachricht an die Knoten, die die
 Replikate halten. Die Knoten blockieren die nötigen Daten und melden zurück ob
@@ -331,15 +331,30 @@ es sonst zu einem möglichen Datenverlust kommt.
 
 # Summary
 
-* Worin unterscheiden sich die Key-Value-Stores
-* Einer ist lokal, die anderen sind verteilt
-* Scalaris unter Transaktionen
-* Riak bietet eine umfangrache Anfragesprache auf Basis von Map/Reduce
-* Warum gibt es kein einheitliches Interface für alle Key-Value-Stores?
-* Ausgehend von den einfachen Interfaces lässt sich feststellen, dass sich
-immer mehr Möglichkeiten der Anfrage entwickelt haben. In dem Zuge
-stellt sich die Frage, ob einige der System uberhaupt noch als Key-Value-Store
-betrachtet werden können.
+Unsere Betrachtung hat vier verschiedene Key-Value-Stores vorgestellt. Wir haben
+gesehen, dass es sowohl lokale Stores auf Prozessebene gibt, als auch verteilte
+Stores. Verteilte Stores greifen dabei oft auf Bibliotheken für lokale,
+persistente Key-Value-Stores zurück. Ein Beispiel hierfür ist Riak mit der
+Möglichkeit Googles LevelDB einzubinden. Wir haben gesehen, dass die meisten
+Key-Value-Stores eine Form des Consistent-Hashing benutzen um das
+Allocationsproblem zu lösen. Scalaris erweitert das Consistent-Hashing um ein
+Routingprotokoll (Chord). Dadurch wird es den einzelnen Knoten des Systems
+möglich nur Teile des globalen Zustands des Systems vorzuhalten und nicht jede
+Veränderung muss zu allen Knoten propagiert werden. Mit Voldemort haben wir
+ein verteiltes System kennengelernt, das vom Interface her dem ursprünglichen
+Key-Value-Store am nächsten ist und darüberhinaus keine weiteren Anfragen zu
+lässt. Im Gegensatz dazu bietet Riak, abgesehen von den Grundfunktionen, eine
+umfangreiche Anfragesprache auf Basis des Map-/Reduce-Konzept an. Scalaris ist
+das einizge System, dass es ermöglicht die Basisoperationen in Transaktionen
+zusammenzufassen. Das einfache Modells eines Key-Value-Stores wurde von den
+verschiedenen System stark bzw. weniger stark erweitert. In dem Zuge stellt sich
+die Frage, ob sich in Zukunft ein Standard für die Basis-Operation entwickeln
+könnte oder ob die stark divergierenden Modell dies verhindern. Die zahlreichen
+Erweiterung werfen darüber hinaus die Frage auf, ob manche System, z.B. Riak
+überhaupt noch als reiner Key-Value-Store betrachtet werden können. Abschließend
+lässt sich festhalten, dass die Entwicklung von verteilten Key-Value-Stores noch
+lange nicht abgeschlossen ist und in Zukunft noch einige interessante
+Entwicklungen zu erwarten sind.
 
 #Quellen
 
@@ -354,4 +369,11 @@ betrachtet werden können.
     * http://project-voldemort.com/javadoc/all/
     * https://github.com/voldemort/voldemort/wiki/Hinted-Handoff
 * Riak
+    * http://wiki.basho.com/Riak.html
+    * http://wiki.basho.com/Secondary-Indexes.html
+    * http://wiki.basho.com/MapReduce.html
+    * http://wiki.basho.com/Concepts.html
 * Tokyo Cabinet
+    * http://fallabs.com/tokyocabinet/spex-en.html
+    * http://www.scribd.com/doc/12016121/Tokyo-Cabinet-and-Tokyo-Tyrant-Presentation
+
