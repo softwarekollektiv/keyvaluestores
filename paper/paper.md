@@ -1,11 +1,14 @@
 % Key-Value-Stores
-% Philipp Borgers \ Felix Höffken
+% Philipp Borgers, \ Felix Höffken
 
-# Abstract
+# Einleitung
 
-# Key-Value-Stores
-
-
+* Was ist ein Key-Value-Store
+* 4 Key-Value-Stores
+* lokale, verteilte Stores
+* Datenmodell
+* Konsistenz, Replikation, Transaktionen
+* Demo
 
 # Tokyo Cabinet
 
@@ -319,3 +322,14 @@ Dies bedeuted, dass immer mindestens 50% der Server erreichbar sein müssen, da
 es sonst zu einem möglichen Datenverlust kommt.
 
 # Summary
+
+* Worin unterscheiden sich die Key-Value-Stores
+* Einer ist lokal, die anderen sind verteilt
+* Scalaris unter Transaktionen
+* Riak bietet eine umfangrache Anfragesprache auf Basis von Map/Reduce
+* Warum gibt es kein einheitliches Interface für alle Key-Value-Stores?
+* Ausgehend von den einfachen Interfaces l ̈sst sich feststellen, dass sich
+immer mehr Möglichkeiten der Anfrage entwickelt haben. In dem Zuge
+stellt sich die Frage, ob einige der System uberhaupt noch als Key-Value-Store
+betrachtet werden können.
+
