@@ -340,3 +340,18 @@ es sonst zu einem möglichen Datenverlust kommt.
 immer mehr Möglichkeiten der Anfrage entwickelt haben. In dem Zuge
 stellt sich die Frage, ob einige der System uberhaupt noch als Key-Value-Store
 betrachtet werden können.
+
+#Quellen
+
+* Scalaris
+    * http://onscale.de/scalarix-learnmore.html
+    * http://www.zib.de/de/pvs/projekte/projektdetails/article/scalaris.html
+    * http://code.google.com/p/scalaris/
+    * http://www.ist-selfman.org/wiki/images/0/0e/ZIBpaperOnPaxos.pdf
+    * http://www.sics.se/~ali/publications/replication.pdf
+* Voldemort
+    * http://project-voldemort.com/design.php
+    * http://project-voldemort.com/javadoc/all/
+    * https://github.com/voldemort/voldemort/wiki/Hinted-Handoff
+* Riak
+* Tokyo Cabinet
