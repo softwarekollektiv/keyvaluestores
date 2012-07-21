@@ -3,12 +3,20 @@
 
 # Einleitung
 
-* Was ist ein Key-Value-Store
-* 4 Key-Value-Stores
-* lokale, verteilte Stores
-* Datenmodell
-* Konsistenz, Replikation, Transaktionen
-* Demo
+In diesem Paper beschäftigen wir uns mit Key-Value-Stores, erklären die 
+Begrifflichkeit und betrachten 4 verschiedene Key-Value-Stores hinsichtlich 
+des verwendeten Datenmodells, der Konsistenz, Replikation und ob sie 
+Transaktionen unterstützen.
+Die betrachteten Key-Value-Stores sind Tokyo Cabinet, Voldemort, Riak und Scalaris.
+
+# Key-Value-Stores
+
+Key-Value-Stores sind Datenbanken, die Daten in Key-Value-Paaren speichern. 
+Der Key (Schlüssel) verweist genau auf ein Datum bzw. Wert (Value). Theoretisch 
+kann man sich Key-Value-Stores als eine Tabelle mit nur 2 Spalten vorstellen, 
+wobei der erste Wert der eindeutige Schlüssel ist.
+Wir unterscheiden zwischen lokalen und verteilten Key-Value-Stores, die entweder
+nur auf einem System laufen (lokal) oder über mehrere Rechner verteilt sind.
 
 # Tokyo Cabinet
 
@@ -328,8 +336,7 @@ es sonst zu einem möglichen Datenverlust kommt.
 * Scalaris unter Transaktionen
 * Riak bietet eine umfangrache Anfragesprache auf Basis von Map/Reduce
 * Warum gibt es kein einheitliches Interface für alle Key-Value-Stores?
-* Ausgehend von den einfachen Interfaces l ̈sst sich feststellen, dass sich
+* Ausgehend von den einfachen Interfaces lässt sich feststellen, dass sich
 immer mehr Möglichkeiten der Anfrage entwickelt haben. In dem Zuge
 stellt sich die Frage, ob einige der System uberhaupt noch als Key-Value-Store
 betrachtet werden können.
-
